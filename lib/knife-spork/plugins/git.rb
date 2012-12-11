@@ -17,8 +17,8 @@ module KnifeSpork
       end
 
       def before_push
-        git_rebase(branch) if rebase?
         git_commit
+        git_rebase(branch) if rebase?
       end
         
       def before_bump
