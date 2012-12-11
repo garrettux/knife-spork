@@ -17,6 +17,7 @@ module KnifeSpork
       end
 
       def before_push
+        git_rebase(branch) if rebase?
         git_commit
       end
         
@@ -205,6 +206,21 @@ module KnifeSpork
         end
       end
 
+      def git_rebase(branch)
+        unless on_branch?(branch)
+          ui.error "You are not on branch #{branch}, did you forget to bump?"
+          exit 1
+        end
+        ui.msg "Git: rebasing #{branch} to #{remote}/master"
+        output = IO.popen("git rebase #{remote}/master 2>&1")
+        Process.wait
+        exit_code = $?
+        if !exit_code.exitstatus ==  0
+          ui.error "#{output.read()}\n"
+          exit 1
+        end
+      end
+  
       def is_repo?(path)
         output = IO.popen("cd #{path} && git rev-parse --git-dir 2>&1")
         Process.wait
@@ -216,6 +232,22 @@ module KnifeSpork
         end
       end
       
+      def on_branch?(branch)
+        cmd = IO.popen("git rev-parse --abbrev-ref HEAD 2>&1")
+        current_branch = cmd.readline.chomp
+        Process.wait
+        exit_code = $?
+        if !exit_code.exitstatus ==  0
+          ui.error "Unable to determine current branch: #{output.read()}\n"
+          exit 1
+        end
+        return current_branch == branch ? true : false
+      end
+
+      def rebase?
+        config.rebase || false
+      end
+
       def remote
         config.remote || 'origin'
       end
