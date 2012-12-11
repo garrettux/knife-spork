@@ -55,9 +55,13 @@ module KnifeSpork
     end
 
     def write_changelog(message, file)
-      old_changelog = File.read(file)
-      new_changelog = message + old_changelog
-      File.open(file, 'w') { |file| file.write(new_changelog) }
+      if File.exists?(file)
+        old_changelog = File.read(file)
+        new_changelog = message + old_changelog
+        File.open(file, 'w') { |file| file.write(new_changelog) }
+      else
+        File.open(file, 'w') { |file| file.write(message) }
+      end
     end
 
   end
