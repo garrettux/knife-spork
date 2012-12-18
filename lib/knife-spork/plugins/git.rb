@@ -24,6 +24,7 @@ module KnifeSpork
       def before_bump
         if config.feature_branching
           git_branch(branch)
+          git_rebase(branch) if rebase?
         else
           git_pull(environment_path) unless cookbook_path.include?(environment_path.gsub"/environments","")
           git_pull_submodules(environment_path) unless cookbook_path.include?(environment_path.gsub"/environments","")
