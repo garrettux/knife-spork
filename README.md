@@ -243,3 +243,5 @@ Adding version constraint apache2 = 2.0.2
 Saving changes to my_environment.json
 Promotion complete. Don't forget to upload your changed my_environment to Chef Server
 ```
+
+foo
