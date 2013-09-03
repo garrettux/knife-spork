@@ -213,7 +213,7 @@ module KnifeSpork
           exit 1
         end
         ui.msg "Git: rebasing #{branch} to #{remote}/master"
-        output = IO.popen("git rebase #{remote}/master 2>&1")
+        output = IO.popen("git fetch && git rebase #{remote}/master 2>&1")
         Process.wait
         exit_code = $?
         if !exit_code.exitstatus ==  0
