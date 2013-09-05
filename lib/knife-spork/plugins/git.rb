@@ -17,8 +17,9 @@ module KnifeSpork
       end
 
       def before_push
-        git_commit
-        git_rebase(branch) if rebase?
+        #git_commit
+        #git_rebase(branch) if rebase?
+        ui.confirm('Did you commit all your changes')
       end
         
       def before_bump
