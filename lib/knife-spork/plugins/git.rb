@@ -19,6 +19,7 @@ module KnifeSpork
       def before_push
         #git_commit
         #git_rebase(branch) if rebase?
+        cookbooks.each { |cookbook| git_add(cookbook.root_dir,"CHANGELOG.md") }
         ui.confirm('Did you commit all your changes')
       end
         
